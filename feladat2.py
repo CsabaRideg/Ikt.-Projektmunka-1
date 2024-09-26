@@ -1,15 +1,31 @@
 import string
 ABC = string.ascii_letters
-NUM = [1,2,3,4,5,6,7,8,9,0]
+NUM = [0,1,2,3,4,5,6,7,8,9]
 
 f = open('ki.txt','r',encoding='utf8')
 lines = f.readlines()
-f.close
+f.close()
 
-random_numbers = []
-random_words = []
+def arrangement_numbers(list):
+    for count,char in enumerate(list):
+        if count != 0:
+            current = count
+            before = count-1
+            while list[current] < list[before]:
+                if list[current] > list[before]:
+                    break
+                if before == 0:
+                    list[before],list[current] = list[current],list[before]
+                    break
+                if list[current] < list[before]:
+                    list[before],list[current] = list[current],list[before]
+                current -=1
+                before-=1
+
+numbers = []
+words = []
 correct_chars = True
-for line in lines: 
+for line in lines:
     line = line.strip().split(";")
     for item in line:
         if item[0] in ABC:
@@ -25,39 +41,15 @@ for line in lines:
                     if int(char) not in NUM:
                         correct_chars = False
         if Type =='text':
-            random_words.append(item)
+            words.append(item)
         elif Type =='number':
-            random_numbers.append(int(item))
-        
+            numbers.append(int(item))
 if correct_chars == False:
     print('Hibás adathalmaz.')
 
-# asc = int(input('Növekvő = 1, Csökkrnő = 0: '))
+sequence = int(input('Növekvő = 1, Csökkenő = 0: '))
+arrangement_numbers(numbers)
 
-for c,i in enumerate(random_numbers):
-    if c != 0:
-        place = c
-        place2 = c-1 
-        while random_numbers[place] <= random_numbers[place2]:
-            place -=1
-            place2 -=1
-            if place2 == 0:
-                random_numbers[place2],random_numbers[place] = random_numbers[place],random_numbers[place2]
-                break
-            if random_numbers[place] < random_numbers[place2]:
-                random_numbers[place2],random_numbers[place] = random_numbers[place],random_numbers[place2]
-            else:
-                break
-            print(i,random_numbers[place],place)
-        print(random_numbers)
-
-
-# if asc == 0:
-#     random_numbers = random_numbers[0:0:-1]
-print(random_numbers)
-
-
-
-
-
-
+if sequence == 0:
+    numbers = numbers[::-1]
+print(numbers)
