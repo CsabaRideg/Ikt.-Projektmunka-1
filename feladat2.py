@@ -6,21 +6,33 @@ f = open('ki.txt','r',encoding='utf8')
 lines = f.readlines()
 f.close()
 
-def arrangement_numbers(list):
+def arrangement(list):
     for count,char in enumerate(list):
         if count != 0:
             current = count
             before = count-1
-            while list[current] < list[before]:
-                if list[current] > list[before]:
-                    break
-                if before == 0:
-                    list[before],list[current] = list[current],list[before]
-                    break
-                if list[current] < list[before]:
-                    list[before],list[current] = list[current],list[before]
-                current -=1
-                before-=1
+            if Type == 'text':
+                while list[current].upper() < list[before].upper():
+                    if list[current].upper() > list[before].upper():
+                        break
+                    if before == 0:
+                        list[before],list[current] = list[current],list[before]
+                        break
+                    if list[current].upper() < list[before].upper():
+                        list[before],list[current] = list[current],list[before]
+                    current -=1
+                    before-=1
+            else:
+                while list[current] < list[before]:
+                    if list[current] > list[before]:
+                        break
+                    if before == 0:
+                        list[before],list[current] = list[current],list[before]
+                        break
+                    if list[current] < list[before]:
+                        list[before],list[current] = list[current],list[before]
+                    current -=1
+                    before-=1
 
 numbers = []
 words = []
@@ -45,11 +57,16 @@ for line in lines:
         elif Type =='number':
             numbers.append(int(item))
 if correct_chars == False:
-    print('Hibás adathalmaz.')
+    print('Helytelen adathalmaz.')
 
 sequence = int(input('Növekvő = 1, Csökkenő = 0: '))
-arrangement_numbers(numbers)
-
-if sequence == 0:
-    numbers = numbers[::-1]
-print(numbers)
+if Type == 'number':
+    arrangement(numbers)
+    if sequence == 0:
+        numbers = numbers[::-1]
+        print(numbers)
+else:
+    arrangement(words)
+    if sequence == 0:
+        words = words[::-1]
+        print(words)
