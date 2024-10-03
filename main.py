@@ -1,10 +1,29 @@
 import random
 import string
 
-def gen1():
+numdrbszamok = []
+numalhatarok = []
+numfelhatarok = []
+strdrbszamok = []
+
+def inputnum():
     drb = int(input("Adott darabszam "))
     alhatar = int(input("alsohatar "))
     felhatar = int(input("felsohatar "))
+    numdrbszamok.append(drb)
+    numalhatarok.append(alhatar)
+    numfelhatarok.append(felhatar)
+    
+    return drb, alhatar, felhatar
+
+def inputstr():
+    drb = int(input("Adott darabszam "))
+    strdrbszamok.append(drb)
+
+    return drb
+
+def gennum():
+    drb, alhatar, felhatar = inputnum()
 
     f = open("ki.txt", "a", encoding="utf8")
     for count,a in enumerate(range(drb)):
@@ -16,8 +35,8 @@ def gen1():
     f.close()
     
 
-def gen2():
-    drb = int(input("Adott darabszam "))
+def genstr():
+    drb = inputstr()
     abc = string.ascii_letters
 
     f = open("ki.txt", "a", encoding="utf8")
@@ -36,4 +55,5 @@ def gen2():
     f.close()
 
 
-gen2()
+def checknum():
+    
