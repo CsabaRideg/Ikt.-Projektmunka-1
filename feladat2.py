@@ -2,7 +2,7 @@ f = open('ki.txt','r',encoding='utf8')
 lines = f.readlines()
 f.close()
 
-def arrangement(list): #cserés rendezés
+def arrangement(list): #Cserés rendezés
     for count,word in enumerate(list):
         if count != 0:
             current = count
@@ -36,7 +36,7 @@ def arrangement2(list): #Shell rendezés
     square= 2
     while True:
         if max_square < len(list)/2:
-            max_square = int(max_square *2)
+            max_square = int(max_square*2)
         if max_square > len(list)/2:
             max_square = int(max_square/2)
             break
