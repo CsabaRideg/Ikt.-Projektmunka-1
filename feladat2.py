@@ -1,8 +1,3 @@
-import string
-import time
-ABC = string.ascii_letters
-NUM = [0,1,2,3,4,5,6,7,8,9]
-
 f = open('ki.txt','r',encoding='utf8')
 lines = f.readlines()
 f.close()
@@ -68,29 +63,20 @@ def arrangement2(list): #Shell rendezés
     return list       
 
 items = []
-correct_chars = True
+correct_list = True
 for line in lines:
-    line = line.strip().split(";")
-    for item in line:
-        if item[0] in ABC:
-            list_type = 'text'
-        elif int(item[0]) in NUM:
-            list_type = 'number'
-        for char in item:
-            if correct_chars:
-                if list_type == 'text':
-                    if char not in ABC:
-                        correct_chars = False
-                elif list_type == 'number':
-                    if int(char) not in NUM:
-                        correct_chars = False
-        if list_type =='text':
-            items.append(item)
-        elif list_type =='number':
-            items.append(int(item))
-
-if correct_chars == False:
+    items = line.strip().split(";")
+    if all(i.isnumeric() for i in items):
+        items = [int(i) for i in items]
+        list_type = 'szám'
+    elif all(i.isalpha() for i in items):
+        list_type = 'szöveg'
+    else:
+        correct_list = False
+    
+if correct_list == False:
     print('Helytelen adathalmaz.')
+    exit()
 
 arrangement_type = int(input('Melyik rendezési módszerrel legyen rendezve a lista? 1/2 -- '))
 if arrangement_type == 1:
@@ -101,16 +87,20 @@ elif arrangement_type == 2:
 sequence = int(input('Növekvő vagy Csökkenő legyen a sorrend? 1/-1 -- '))
 if sequence == -1:
     print(list_arranged[::-1])
-if sequence == 1:
+elif sequence == 1:
     print(list_arranged)
 
 add_new = int(input(f"Szeretne új elemet hozzáadni a listához? 0/1 -- "))
 while add_new != 0:
+    print(f"Az új a elem {list_type} kell ,hogy legyen!")
     new_item = input(f"Adjon meg egy új elemet. -- ")
+    for char in new_item:
+        if type != 'text' and char.isalpha():
+            print(f"Az elem minden karaktere {list_type} kell hogy legyen!")
+        if type != 'number' and char.isnumeric():
+            print(f"Az elem minden karaktere {list_type} kell hogy legyen!")
     for count,i in enumerate(items):
         if i.upper() > new_item.upper():
             items.insert(count,new_item)
             break
-    print(new_item)
-    print(items)
     add_new = int(input(f"Szeretne új elemet hozzáadni a listához? 0/1 -- "))
