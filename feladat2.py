@@ -12,7 +12,7 @@ def arrangement(list): #cserés rendezés
         if count != 0:
             current = count
             before = count-1
-            if Type == 'text':
+            if list_type == 'text':
                 while list[current].upper() < list[before].upper():
                     if list[current].upper() > list[before].upper():
                         break
@@ -73,26 +73,26 @@ for line in lines:
     line = line.strip().split(";")
     for item in line:
         if item[0] in ABC:
-            Type = 'text'
+            list_type = 'text'
         elif int(item[0]) in NUM:
-            Type = 'number'
+            list_type = 'number'
         for char in item:
             if correct_chars:
-                if Type == 'text':
+                if list_type == 'text':
                     if char not in ABC:
                         correct_chars = False
-                elif Type == 'number':
+                elif list_type == 'number':
                     if int(char) not in NUM:
                         correct_chars = False
-        if Type =='text':
+        if list_type =='text':
             items.append(item)
-        elif Type =='number':
+        elif list_type =='number':
             items.append(int(item))
 
 if correct_chars == False:
     print('Helytelen adathalmaz.')
 
-arrangement_type = int(input('Melyik rendezési módszerrel legyen rendezve a list? 1/2 -- '))
+arrangement_type = int(input('Melyik rendezési módszerrel legyen rendezve a lista? 1/2 -- '))
 if arrangement_type == 1:
     list_arranged = arrangement(items)
 elif arrangement_type == 2:
@@ -103,3 +103,14 @@ if sequence == -1:
     print(list_arranged[::-1])
 if sequence == 1:
     print(list_arranged)
+
+add_new = int(input(f"Szeretne új elemet hozzáadni a listához? 0/1 -- "))
+while add_new != 0:
+    new_item = input(f"Adjon meg egy új elemet. -- ")
+    for count,i in enumerate(items):
+        if i.upper() > new_item.upper():
+            items.insert(count,new_item)
+            break
+    print(new_item)
+    print(items)
+    add_new = int(input(f"Szeretne új elemet hozzáadni a listához? 0/1 -- "))
