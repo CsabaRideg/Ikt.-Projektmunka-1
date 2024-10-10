@@ -1,22 +1,20 @@
-path = input(f"Adja meg a beolvasni kívánt fájl elérési útvonalát(pl:'ki.txt'). -- ")
+path = input(f"Adja meg a beolvasni kívánt fájl (relatív) elérési útvonalát (pl:'ki.txt'). -- ")
 inbetween = input(f"Milyen jellel vannak az adatok elválasztva? -- ")
-
 f = open(path,'r',encoding='utf8')
 lines = f.readlines()
 f.close()
 lines = [line.strip().split(inbetween) for line in lines]
-arrange_together = 0
 if len(lines) > 1:
-    arrange_together = input("Az állományban több sorban is vannak adatok. Egybe legyenek rendezve vagy külön soronként? 0/1 -- ")
+    arrange_together = int(input("Az állományban több sorban is vannak adatok. Egybe legyenek rendezve vagy külön soronként? 0/1 -- "))
     if arrange_together == 0:
         lines = ["".join(lines)]
 
-def arrangement(list): #Cserés rendezés
+def arrangement(list,data_type): #Cserés rendezés
     for count,word in enumerate(list):
         if count != 0:
             current = count
             before = count-1
-            if list_type == 'text':
+            if data_type == 'szöveg':
                 while list[current].upper() < list[before].upper():
                     if list[current].upper() > list[before].upper():
                         break
@@ -40,7 +38,7 @@ def arrangement(list): #Cserés rendezés
                     before-=1
     return list
 
-def arrangement2(list): #Shell rendezés
+def arrangement2(list,data_type): #Shell rendezés
     max_square = 2
     square= 2
     while True:
@@ -60,7 +58,7 @@ def arrangement2(list): #Shell rendezés
                 if test_count >= len(list):
                     break
             test_count = count
-            arrangement(little_list)
+            arrangement(little_list,data_type)
             while len(little_list) != 0:
                 list[test_count] = little_list[0]
                 little_list.remove(little_list[0])
@@ -68,7 +66,7 @@ def arrangement2(list): #Shell rendezés
             if count == gap:
                 square = int(square*2)
                 break
-    arrangement(list)
+    arrangement(list,data_type)
     return list       
 
 items = []
@@ -80,20 +78,20 @@ for count,line in enumerate(lines):
         items.append(line)
         list_types.append('szám')
     elif all(i.isalpha() for i in lines[count]):
-        items.append(lines)
+        items.append(line)
         list_types.append('szöveg')
     else:
         for item in line:
             if all(i.isnumeric() for i in item)==False and all(i.isalpha() for i in item)==False:
                 print('Helytelen adat van az adathalmazba --> Rendezés lehetetlen. :(')
                 exit()
-        print(f"A {count+1}. listád helytelen!")
-        mixed_list = input(f"A {count+1}. listád tartalmaz számhalmazokat és betühalmazokat is. Külön legyen rendezve vagy egybe? 0/1 -- ")
-        if mixed_list == 1:
+        mixed_list = int(input(f"A {count+1}. lista tartalmaz számokat és betühalmazokat is. Egybe vagy kölön a számokat és külön a betűhalmazokat rendezve? 0/1 -- "))
+        if mixed_list == 0:
             list_types.append('vegyes')
             items.append(line)
-        elif mixed_list ==0:
-            numbers,words = [],[]
+        elif mixed_list == 1:
+            numbers= []
+            words = []
             for item in line:
                 if all(i.isnumeric() for i in item):
                     numbers.append(item)
@@ -101,30 +99,27 @@ for count,line in enumerate(lines):
                     words.append(item)
             list_types.append('külön')
             items.append([numbers,words])
-
+print(list_types)
+print(items)
 
 arrangement_type = int(input('Melyik rendezési módszerrel legyen rendezve a lista? 1/2 -- '))
 if arrangement_type == 1:
-    list_arranged = arrangement(items)
+    list_arranged = arrangement(items[0],list_types[0])
 elif arrangement_type == 2:
-    list_arranged = arrangement2(items)
+    list_arranged = arrangement2(items[0],list_types[0])
 
 sequence = int(input('Növekvő vagy Csökkenő legyen a sorrend? 1/-1 -- '))
-if sequence == -1:
-    print(list_arranged[::-1])
-elif sequence == 1:
-    print(list_arranged)
+print(list_arranged[::sequence])
 
 add_new = int(input(f"Szeretne új elemet hozzáadni a listához? 0/1 -- "))
 while add_new != 0:
-    print(f"Az új a elem {list_type} kell ,hogy legyen!")
     new_item = input(f"Adjon meg egy új elemet. -- ")
     for char in new_item:
         if type != 'text' and char.isalpha():
-            print(f"Az elem minden karaktere {list_type} kell hogy legyen!")
+            print(f"Az elem minden karaktere kell hogy legyen!")
         if type != 'number' and char.isnumeric():
-            print(f"Az elem minden karaktere {list_type} kell hogy legyen!")
-    for count,i in enumerate(items):
+            print(f"Az elem minden karaktere kell hogy legyen!")
+    for count,i in enumerate(items[0]):
         if i.upper() > new_item.upper():
             items.insert(count,new_item)
             break
