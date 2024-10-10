@@ -4,7 +4,7 @@ inbetween = input(f"Milyen jellel vannak az adatok elválasztva? -- ")
 f = open(path,'r',encoding='utf8')
 lines = f.readlines()
 f.close()
-lines = [line.strip() for line in lines]
+lines = [line.strip().split(inbetween) for line in lines]
 arrange_together = 0
 if len(lines) > 1:
     arrange_together = input("Az állományban több sorban is vannak adatok. Egybe legyenek rendezve vagy külön soronként? 0/1 -- ")
@@ -72,24 +72,36 @@ def arrangement2(list): #Shell rendezés
     return list       
 
 items = []
-numbers = []
-words = []
 list_types = []
 correct_list = True
 for count,line in enumerate(lines):
-    items.append(line.strip().split(inbetween))
-    if all(i.isnumeric() for i in items[count]):
-        items = [int(i) for i in items[count]]
-        list_type = 'szám'
-    elif all(i.isalpha() for i in items[count]):
-        list_type = 'szöveg'
+    if all(i.isnumeric() for i in lines[count]):
+        line = [int(i) for i in line]
+        items.append(line)
+        list_types.append('szám')
+    elif all(i.isalpha() for i in lines[count]):
+        items.append(lines)
+        list_types.append('szöveg')
     else:
-        mixed_list = input("A listáid tartalmaznak számokat és betüket is. Legyenek külön rendezve? 0/1 -- ")
-        correct_list = False
-    
-if correct_list == False:
-    print('Helytelen adathalmaz.')
-    exit()
+        for item in line:
+            if all(i.isnumeric() for i in item)==False and all(i.isalpha() for i in item)==False:
+                print('Helytelen adat van az adathalmazba --> Rendezés lehetetlen. :(')
+                exit()
+        print(f"A {count+1}. listád helytelen!")
+        mixed_list = input(f"A {count+1}. listád tartalmaz számhalmazokat és betühalmazokat is. Külön legyen rendezve vagy egybe? 0/1 -- ")
+        if mixed_list == 1:
+            list_types.append('vegyes')
+            items.append(line)
+        elif mixed_list ==0:
+            numbers,words = [],[]
+            for item in line:
+                if all(i.isnumeric() for i in item):
+                    numbers.append(item)
+                elif all(i.isalpha() for i in item):
+                    words.append(item)
+            list_types.append('külön')
+            items.append([numbers,words])
+
 
 arrangement_type = int(input('Melyik rendezési módszerrel legyen rendezve a lista? 1/2 -- '))
 if arrangement_type == 1:
