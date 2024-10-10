@@ -1,6 +1,15 @@
-f = open('ki.txt','r',encoding='utf8')
+path = input(f"Adja meg a beolvasni kívánt fájl elérési útvonalát(pl:'ki.txt'). -- ")
+inbetween = input(f"Milyen jellel vannak az adatok elválasztva? -- ")
+
+f = open(path,'r',encoding='utf8')
 lines = f.readlines()
 f.close()
+lines = [line.strip() for line in lines]
+arrange_together = 0
+if len(lines) > 1:
+    arrange_together = input("Az állományban több sorban is vannak adatok. Egybe legyenek rendezve vagy külön soronként? 0/1 -- ")
+    if arrange_together == 0:
+        lines = ["".join(lines)]
 
 def arrangement(list): #Cserés rendezés
     for count,word in enumerate(list):
@@ -63,15 +72,19 @@ def arrangement2(list): #Shell rendezés
     return list       
 
 items = []
+numbers = []
+words = []
+list_types = []
 correct_list = True
-for line in lines:
-    items = line.strip().split(";")
-    if all(i.isnumeric() for i in items):
-        items = [int(i) for i in items]
+for count,line in enumerate(lines):
+    items.append(line.strip().split(inbetween))
+    if all(i.isnumeric() for i in items[count]):
+        items = [int(i) for i in items[count]]
         list_type = 'szám'
-    elif all(i.isalpha() for i in items):
+    elif all(i.isalpha() for i in items[count]):
         list_type = 'szöveg'
     else:
+        mixed_list = input("A listáid tartalmaznak számokat és betüket is. Legyenek külön rendezve? 0/1 -- ")
         correct_list = False
     
 if correct_list == False:
