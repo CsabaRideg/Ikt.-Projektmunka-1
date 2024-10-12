@@ -78,12 +78,15 @@ def number_reverter(list): # Számok elöl 0-kat eltöntetés
     return list
 
 lists = []
+list_types = []
 correct_list = True
 for count,line in enumerate(lines):
     if all(i.isnumeric() for i in lines[count]):
         lists.append(number_converter(line))
+        list_types.append('szám')
     elif all(i.isalpha() for i in lines[count]):
         lists.append(line)
+        list_types.append('betűhalmaz')
     else:
         for item in line:
             if all(i.isnumeric() for i in item)==False and all(i.isalpha() for i in item)==False:
@@ -91,8 +94,8 @@ for count,line in enumerate(lines):
                 exit()
         mixed_list = int(input(f"A {count+1}. lista tartalmaz számokat és betühalmazokat is. Egybe vagy kölön a számokat és külön a betűhalmazokat rendezve? 0/1 -- "))
         if mixed_list == 0:
-
             lists.append(number_converter(line))
+            list_types.append('vegyes')
         elif mixed_list == 1:
             numbers= []
             words = []
@@ -102,6 +105,7 @@ for count,line in enumerate(lines):
                 elif all(i.isalpha() for i in item):
                     words.append(item)
             lists.append([number_converter(numbers),words])
+            list_types.append('vegyes')
 print(lists)
 
 arrangement_type = int(input('Melyik rendezési módszerrel legyen rendezve a lista? 1/2 -- '))
@@ -110,19 +114,22 @@ for count,i in enumerate(lists):
     if len(i) ==2:
         if isinstance(i[1],list):
             if arrangement_type == 1:
-                all(lists[count][count2] == arrangement1(i2)[::sequence] for count2,i2 in enumerate(i))
+                lists[count][0] = arrangement1(i[0])[::sequence]
+                lists[count][1] = arrangement1(i[0])[::sequence]
             elif arrangement_type == 2:
-                all(lists[count][count2] == arrangement2(i2)[::sequence] for count2,i2 in enumerate(i))
+                lists[count][0] = arrangement2(i[0])[::sequence]
+                lists[count][1] = arrangement2(i[0])[::sequence]
     else:
         if arrangement_type == 1:
-            lists[count] == arrangement1(i)[::sequence]
+            lists[count] = arrangement1(i)[::sequence]
         elif arrangement_type == 2:
-            lists[count] == arrangement2(i)[::sequence]
-
+            lists[count] = arrangement2(i)[::sequence]
 for i in lists:
     print(i)
+
 add_new = int(input(f"Szeretne új elemet hozzáadni a listához? 0/1 -- "))
-list_number = int()
+list_number = int(input("Hanyadik listához szeretne hozzáadni? -- "))-1
+print(f"Ebbe a listába {list_types[list_number]}")
 while add_new != 0:
     new_item = input(f"Adjon meg egy új elemet. -- ")
     for char in new_item:
@@ -134,4 +141,5 @@ while add_new != 0:
         if i.upper() > new_item.upper():
             lists.insert(count,new_item)
             break
-    add_new = int(input(f"Szeretne új elemet hozzáadni a listához? 0/1 -- "))
+    add_new = int(input(f"Szeretne még új elemet hozzáadni a listához? 0/1 -- "))
+    list_number = int(input("Hanyadik listához szeretne hozzáadni? -- "))
