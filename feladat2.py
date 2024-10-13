@@ -71,7 +71,7 @@ def number_converter(list): #Számok elé 0-kat pakolás
     list = numbers + list
     return list
 
-def number_reverter(list): # Számok elöl 0-kat eltöntetés
+def number_reverter(list): # Számok elöl 0-kat eltüntetés
     for count,item in enumerate(list):
         if item.isnumeric():
             list[count] = str(int(item))
@@ -83,10 +83,10 @@ correct_list = True
 for count,line in enumerate(lines):
     if all(i.isnumeric() for i in lines[count]):
         lists.append(number_converter(line))
-        list_types.append('szám')
+        list_types.append('számok')
     elif all(i.isalpha() for i in lines[count]):
         lists.append(line)
-        list_types.append('betűhalmaz')
+        list_types.append('betűhalmazok')
     else:
         for item in line:
             if all(i.isnumeric() for i in item)==False and all(i.isalpha() for i in item)==False:
@@ -95,7 +95,7 @@ for count,line in enumerate(lines):
         mixed_list = int(input(f"A {count+1}. lista tartalmaz számokat és betühalmazokat is. Egybe vagy kölön a számokat és külön a betűhalmazokat rendezve? 0/1 -- "))
         if mixed_list == 0:
             lists.append(number_converter(line))
-            list_types.append('vegyes')
+            list_types.append('számok és betűhalmazok vegyesen')
         elif mixed_list == 1:
             numbers= []
             words = []
@@ -105,7 +105,7 @@ for count,line in enumerate(lines):
                 elif all(i.isalpha() for i in item):
                     words.append(item)
             lists.append([number_converter(numbers),words])
-            list_types.append('vegyes')
+            list_types.append('számok és betűhalmazok külön')
 print(lists)
 
 arrangement_type = int(input('Melyik rendezési módszerrel legyen rendezve a lista? 1/2 -- '))
@@ -129,15 +129,12 @@ for i in lists:
 
 add_new = int(input(f"Szeretne új elemet hozzáadni a listához? 0/1 -- "))
 list_number = int(input("Hanyadik listához szeretne hozzáadni? -- "))-1
-print(f"Ebbe a listába {list_types[list_number]}")
+print(f"Ebben a listában {list_types[list_number]} vannak.")
 while add_new != 0:
-    new_item = input(f"Adjon meg egy új elemet. -- ")
-    for char in new_item:
-        if type != 'text' and char.isalpha():
-            print(f"Az elem minden karaktere kell hogy legyen!")
-        if type != 'number' and char.isnumeric():
-            print(f"Az elem minden karaktere kell hogy legyen!")
-    for count,i in enumerate(lists[0]):
+    while new_item.isnumeric==False and add_new.isnumeric == False:
+        new_item = input(f"Adjon meg egy új elemet. -- ")
+        
+    for count,i in enumerate(lists[list_number]):
         if i.upper() > new_item.upper():
             lists.insert(count,new_item)
             break
