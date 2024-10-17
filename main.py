@@ -1,5 +1,6 @@
 import random
 import string
+import os
 
 numdrbszamok = []
 numalhatarok = []
@@ -54,6 +55,55 @@ def genstr():
 
     f.close()
 
+def checknums():
+    if os.path.exists("ki.txt") and os.stat("ki.txt").st_size == 0:
+        print("A ki.txt fájl üres.")
+        return
+    drb, alhatar, felhatar = inputnum()
+    with open("ki.txt", "r", encoding="utf8") as f:
+        lines = f.readlines()
+        for line in lines:
+            try:
+                numbers = list(map(int, line.strip().split(";")))
+                if all(alhatar <= n <= felhatar for n in numbers) and len(numbers) == drb:
+                    print(f"{line.strip()} megfelel a feltételeknek.")
+                else:
+                    print(f"{line.strip()} nem felel meg a feltételeknek.")
+            except ValueError:
+                continue
 
-def checknum():
+def checkstrs():
+    if os.path.exists("ki.txt") and os.stat("ki.txt").st_size == 0:
+        print("A ki.txt fájl üres.")
+        return
+    drb = inputstr()
+    with open("ki.txt", "r", encoding="utf8") as f:
+        lines = f.readlines()
+        for line in lines:
+            strings = line.strip().split(";")
+            if all(s.isalpha() and (1 <= len(s) <= 20) for s in strings) and len(strings) == drb:
+                print(f"{line.strip()} megfelel a feltételeknek.")
+            else:
+                print(f"{line.strip()} nem felel meg a feltételeknek.")
+
+def menu():
+    print("Válasszon az alábbi lehetőségek közül:")
+    print("1. Véletlen egész számok generálása")
+    print("2. Véletlen szöveg generálása")
+    print("3. Számok ellenőrzése")
+    print("4. Szövegek ellenőrzése")
+
+    choice = int(input("Adja meg a választott lehetőséget (1-4): "))
     
+    if choice == 1:
+        gennum()
+    elif choice == 2:
+        genstr()
+    elif choice == 3:
+        checknums()
+    elif choice == 4:
+        checkstrs()
+    else:
+        print("Érvénytelen választás.")
+
+menu()
