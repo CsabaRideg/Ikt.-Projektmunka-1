@@ -8,9 +8,9 @@ numfelhatarok = []
 strdrbszamok = []
 
 def inputnum():
-    drb = int(input("Adott darabszam "))
-    alhatar = int(input("alsohatar "))
-    felhatar = int(input("felsohatar "))
+    drb = int(input("Add meg hány darab szám legyen generálva: "))
+    alhatar = int(input("Add meg mennyi legyen a legkisebb generált szám: "))
+    felhatar = int(input("Add meg mennyi legyen a legnagyobb generált szám: "))
     numdrbszamok.append(drb)
     numalhatarok.append(alhatar)
     numfelhatarok.append(felhatar)
@@ -18,7 +18,7 @@ def inputnum():
     return drb, alhatar, felhatar
 
 def inputstr():
-    drb = int(input("Adott darabszam "))
+    drb = int(input("Add meg hány darab betűhalmaz legyen generálva: "))
     strdrbszamok.append(drb)
 
     return drb
@@ -59,7 +59,9 @@ def checknums():
     if os.path.exists("ki.txt") and os.stat("ki.txt").st_size == 0:
         print("A ki.txt fájl üres.")
         return
-    drb, alhatar, felhatar = inputnum()
+    drb = int(input("Add meg hány darab szám volt generálva: "))
+    alhatar = int(input("Add meg mennyi volt az alsó határ: "))
+    felhatar = int(input("Add meg mennyi volt a felső határ: "))
     with open("ki.txt", "r", encoding="utf8") as f:
         lines = f.readlines()
         for line in lines:
@@ -76,15 +78,20 @@ def checkstrs():
     if os.path.exists("ki.txt") and os.stat("ki.txt").st_size == 0:
         print("A ki.txt fájl üres.")
         return
-    drb = inputstr()
+    drb = int(input("Add meg hány darab betűhalmaz volt generálva: "))
     with open("ki.txt", "r", encoding="utf8") as f:
         lines = f.readlines()
         for line in lines:
-            strings = line.strip().split(";")
-            if all(s.isalpha() and (1 <= len(s) <= 20) for s in strings) and len(strings) == drb:
-                print(f"{line.strip()} megfelel a feltételeknek.")
-            else:
-                print(f"{line.strip()} nem felel meg a feltételeknek.")
+            if any(char.isdigit() for char in line):
+                continue
+            try:
+                strings = line.strip().split(";")
+                if all(1 <= len(s) <= 20 for s in strings) and len(strings) == drb:
+                    print(f"{line.strip()} megfelel a feltételeknek.")
+                else:
+                    print(f"{line.strip()} nem felel meg a feltételeknek.")
+            except ValueError:
+                continue
 
 def menu():
     print("Válasszon az alábbi lehetőségek közül:")
@@ -92,8 +99,9 @@ def menu():
     print("2. Véletlen szöveg generálása")
     print("3. Számok ellenőrzése")
     print("4. Szövegek ellenőrzése")
+    print("5. Kilépés")
 
-    choice = int(input("Adja meg a választott lehetőséget (1-4): "))
+    choice = int(input("Adja meg a választott lehetőséget (1-5): "))
     
     if choice == 1:
         gennum()
@@ -103,6 +111,8 @@ def menu():
         checknums()
     elif choice == 4:
         checkstrs()
+    elif choice == 5:
+        quit
     else:
         print("Érvénytelen választás.")
 
