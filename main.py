@@ -84,14 +84,11 @@ def checkstrs():
         for line in lines:
             if any(char.isdigit() for char in line):
                 continue
-            try:
-                strings = line.strip().split(";")
-                if all(1 <= len(s) <= 20 for s in strings) and len(strings) == drb:
-                    print(f"{line.strip()} megfelel a feltételeknek.")
-                else:
-                    print(f"{line.strip()} nem felel meg a feltételeknek.")
-            except ValueError:
-                continue
+            strings = line.strip().split(";")
+            if all(1 <= len(s) <= 20 for s in strings) and len(strings) == drb:
+                print(f"{line.strip()} megfelel a feltételeknek.")
+            else:
+                print(f"{line.strip()} nem felel meg a feltételeknek.")
 
 def menu():
     print("Válasszon az alábbi lehetőségek közül:")
